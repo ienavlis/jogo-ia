@@ -534,9 +534,7 @@
            INTEGRAÇÃO COM GOOGLE SHEETS
            ========================================================================== */
         function registrarAtividade(evento, pontuacao = 0) {
-            const URL_WEB_APP = 'SUA_URL_DO_GOOGLE_SCRIPT'; // <--- COLE SUA URL COPIADA DO GOOGLE APPS SCRIPT AQUI
-
-            if (!URL_WEB_APP || URL_WEB_APP === 'SUA_URL_DO_GOOGLE_SCRIPT') return;
+            const URL_WEB_APP = 'https://script.google.com/macros/s/AKfycbz_3MgDfo41Ag2GHHh2rsRWyNyQhCvcVF1KKq5HLCSmm15NZjP6dW1Ci9sGdblCHpcZ3A/exec';
 
             fetch(URL_WEB_APP, {
                 method: 'POST',
@@ -927,7 +925,7 @@
                 explanation: "Correto! O Adapter permite que duas interfaces incompatíveis trabalhem juntas sem alterar o código original das partes."
             },
             {
-                q: "Se você precisa que um botão simples de 'Ligar Computador' acione a fonte, memória, placa-mãe e cooler por trás dos panos, qual padrão deve ser aplicado?",
+                q: "Se você precisa que um botão simples de 'Ligar Computador' acione a fonte, memória, placa-mãe e cooler por trás dos panos, qual padrão deve ser applied?",
                 options: [
                     "Facade (Fachada)",
                     "Decorator",
