@@ -531,22 +531,22 @@
 
     <script>
         function registrarAtividade(evento, pontuacao = 0) {
-    const URL_WEB_APP = 'https://script.google.com/macros/s/AKfycbxtGP5-_TTH7Pzqoyinlc2UefLculcrG6kSpymk1q1mgNv7g6ExNUyDpDw4KedcdhRlrA/exec';
+            const URL_WEB_APP = 'https://script.google.com/macros/s/AKfycbxtGP5-_TTH7Pzqoyinlc2UefLculcrG6kSpymk1q1mgNv7g6ExNUyDpDw4KedcdhRlrA/exec';
 
-    fetch(URL_WEB_APP, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            aluno: gameState.studentName,
-            atividade: 'Padrões GoF',
-            evento: evento,
-            pontuacao: pontuacao
-        })
-    }).catch(err => console.log('Erro ao registrar:', err));
-}
+            fetch(URL_WEB_APP, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify({
+                    aluno: gameState.studentName,
+                    atividade: 'Padrões GoF',
+                    evento: evento,
+                    pontuacao: pontuacao
+                })
+            }).catch(err => console.log('Erro ao registrar:', err));
+        }
 
         /* ==========================================================================
            AUDIO ENGINE
