@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA & ML LAB: A Jornada da Inteligência Artificial</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neonCyan: '#00f0ff',
+                        neonPurple: '#a855f7',
+                        neonEmerald: '#10b981',
+                        neonGold: '#fbbf24',
+                        darkBg: '#0b0f19',
+                        cardBg: 'rgba(17, 24, 39, 0.75)'
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite alternate',
+                        'float': 'float 3s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 10px rgba(0,240,255,0.2)' },
+                            '100%': { boxShadow: '0 0 25px rgba(0,240,255,0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+        /* Print Styles for Certificate */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-print-area, #certificate-print-area * {
+                visibility: visible;
+            }
+            #certificate-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+                color: black !important;
+                padding: 20px;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-slate-100">
+
+    <!-- Sound Effect Canvas Overlay for Particles -->
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- Header / Top Bar -->
+    <header class="w-full border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-xl font-bold shadow-lg shadow-cyan-500/20">
+                    🤖
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400 text-lg md:text-xl tracking-tight">
+                        IA & ML LAB
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">A Jornada da Inteligência Artificial</p>
+                </div>
+            </div>
+
+            <!-- Score & Audio Bar -->
+            <div class="flex items-center space-x-4">
+                <!-- Score Indicator -->
+                <div class="flex items-center space-x-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+                    <span class="text-amber-400 text-sm">⭐</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">XP:</span>
+                    <span id="score-display" class="font-extrabold text-cyan-400 text-sm">0</span>
+                </div>
+
+                <!-- Mute Toggle -->
+                <button id="sound-btn" onclick="toggleSound()" class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-300 transition-all hover:text-cyan-400" title="Ligar/Desligar Som">
+                    <span id="sound-icon">🔊</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Global Progress Bar -->
+        <div class="w-full bg-slate-800/50 h-1.5">
+            <div id="progress-bar" class="bg-gradient-to-r from-cyan-500 via-purple-500 to-emerald-500 h-1.5 w-0 transition-all duration-500"></div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- SCREEN 0: WELCOME & AVATAR -->
+        <section id="screen-welcome" class="space-y-6">
+            <div class="text-center space-y-4 max-w-2xl mx-auto my-8">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                    Laboratório Interativo EdTech
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                    Desvende os Segredos da <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Inteligência Artificial</span>
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    Bem-vindo(a) ao laboratório virtual! Como um cientista de IA, você irá treinar modelos, combater vieses preconceituosos, ensinar robôs a tomar decisões e dominar os mistérios da IA Generativa.
+                </p>
+            </div>
+
+            <!-- Card Setup -->
+            <div class="max-w-md mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 backdrop-blur-xl shadow-2xl space-y-5">
+                <h3 class="text-lg font-bold text-slate-200 border-b border-slate-800 pb-2">Identificação do Cientista</h3>
+                
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Seu Nome / Apelido</label>
+                    <input type="text" id="student-name" placeholder="Ex: Alex Turing" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Escolha seu Avatar de IA</label>
+                    <div class="grid grid-cols-4 gap-3" id="avatar-selector">
+                        <button onclick="selectAvatar('🔬', this)" class="avatar-option p-3 bg-slate-800/80 rounded-xl border-2 border-cyan-400 text-2xl text-center hover:scale-105 transition-all">🔬</button>
+                        <button onclick="selectAvatar('🧠', this)" class="avatar-option p-3 bg-slate-800/80 rounded-xl border-2 border-transparent text-2xl text-center hover:scale-105 transition-all">🧠</button>
+                        <button onclick="selectAvatar('🚀', this)" class="avatar-option p-3 bg-slate-800/80 rounded-xl border-2 border-transparent text-2xl text-center hover:scale-105 transition-all">🚀</button>
+                        <button onclick="selectAvatar('💻', this)" class="avatar-option p-3 bg-slate-800/80 rounded-xl border-2 border-transparent text-2xl text-center hover:scale-105 transition-all">💻</button>
+                    </div>
+                </div>
+
+                <button onclick="startJourney()" class="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/25 transition-all transform active:scale-95 flex items-center justify-center space-x-2">
+                    <span>Iniciar Jornada</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- MODULE 1: SUPERVISED LEARNING -->
+        <section id="screen-mod1" class="hidden space-y-6">
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-6 backdrop-blur-md">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-slate-800 pb-3">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-cyan-400 tracking-wider">Módulo 01</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Aprendizado Supervisionado: Detetor de Phishing</h2>
+                    </div>
+                    <div class="flex gap-4 text-xs">
+                        <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">Acurácia: <span id="m1-accuracy" class="font-bold text-cyan-400">0%</span></div>
+                        <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">Perda (Loss): <span id="m1-loss" class="font-bold text-rose-400">1.00</span></div>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 text-sm mb-6">
+                    No <strong class="text-cyan-400">Aprendizado Supervisionado</strong>, nós ensinamos a IA rotulando dados de treino. Classifique os emails a seguir em <span class="text-emerald-400 font-semibold">Seguro</span> ou <span class="text-rose-400 font-semibold">Spam / Phishing</span> para treinar seu algoritmo de segurança!
+                </p>
+
+                <!-- Classification Arena -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <!-- Email Card Slider -->
+                    <div class="md:col-span-2 bg-slate-950 border border-slate-800 rounded-2xl p-5 relative overflow-hidden min-h-[220px] flex flex-col justify-between shadow-inner">
+                        <div class="flex justify-between items-center text-xs text-slate-500 border-b border-slate-800/80 pb-2">
+                            <span>Amostra do Dataset <span id="m1-card-index">1</span>/6</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300" id="m1-card-type">Email Entrante</span>
+                        </div>
+                        
+                        <div class="my-4">
+                            <h4 id="m1-card-sender" class="text-xs font-bold text-cyan-400 mb-1">remetente@desconhecido.com</h4>
+                            <p id="m1-card-content" class="text-slate-200 font-medium text-sm sm:text-base leading-relaxed">
+                                "URGENTE! Você ganhou R$ 10.000,00 no PIX! Clique aqui imediatamente para resgatar seu prêmio!"
+                            </p>
+                        </div>
+
+                        <!-- Classification Action Buttons -->
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <button onclick="classifyCard('safe')" class="py-2.5 px-4 bg-emerald-900/30 hover:bg-emerald-600/40 border border-emerald-500/50 text-emerald-300 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 active:scale-95">
+                                <span>🛡️ Seguro</span>
+                            </button>
+                            <button onclick="classifyCard('spam')" class="py-2.5 px-4 bg-rose-900/30 hover:bg-rose-600/40 border border-rose-500/50 text-rose-300 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 active:scale-95">
+                                <span>🚨 Spam / Phishing</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Matrix & Live Feedback -->
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 text-center space-y-3">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Matriz de Confusão em Tempo Real</h4>
+                        <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                            <div class="bg-emerald-950/40 border border-emerald-500/30 p-2 rounded-lg">
+                                <span class="text-slate-400 block text-[10px]">Verdadeiros Seguros</span>
+                                <span id="mc-tp" class="text-lg font-bold text-emerald-400">0</span>
+                            </div>
+                            <div class="bg-rose-950/40 border border-rose-500/30 p-2 rounded-lg">
+                                <span class="text-slate-400 block text-[10px]">Falsos Seguros</span>
+                                <span id="mc-fn" class="text-lg font-bold text-rose-400">0</span>
+                            </div>
+                            <div class="bg-rose-950/40 border border-rose-500/30 p-2 rounded-lg">
+                                <span class="text-slate-400 block text-[10px]">Falsos Spams</span>
+                                <span id="mc-fp" class="text-lg font-bold text-rose-400">0</span>
+                            </div>
+                            <div class="bg-emerald-950/40 border border-emerald-500/30 p-2 rounded-lg">
+                                <span class="text-slate-400 block text-[10px]">Verdadeiros Spams</span>
+                                <span id="mc-tn" class="text-lg font-bold text-emerald-400">0</span>
+                            </div>
+                        </div>
+                        <div id="m1-feedback" class="text-xs font-semibold text-slate-400 h-6 flex items-center justify-center">
+                            Aguardando classificação...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overfitting vs Underfitting Interactive Lab -->
+                <div class="mt-8 pt-6 border-t border-slate-800 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold text-slate-200 flex items-center gap-2">
+                            <span>🧪</span> Conceito Chave: Complexidade do Modelo
+                        </h3>
+                        <span class="text-xs bg-purple-500/10 text-purple-400 border border-purple-500/30 px-2.5 py-1 rounded-full font-mono">Overfitting vs Underfitting</span>
+                    </div>
+
+                    <p class="text-xs text-slate-400">
+                        Mova o controle para entender o que acontece quando o algoritmo é simples demais ou quando ele "decora" tudo.
+                    </p>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <div class="flex justify-between text-xs font-bold">
+                            <span class="text-amber-400">Underfitting (MUITO SIMPLES)</span>
+                            <span class="text-emerald-400">Modelo Ideal (EQUILIBRADO)</span>
+                            <span class="text-rose-400">Overfitting (MUITO COMPLEXO / DECORA)</span>
+                        </div>
+                        <input type="range" id="fit-slider" min="1" max="3" step="1" value="2" oninput="updateFitConcept(this.value)" class="w-full accent-cyan-400 cursor-pointer">
+                        <div id="fit-explanation" class="text-xs bg-slate-900 p-3 rounded-lg border border-slate-800 text-slate-300">
+                            <strong>Modelo Ideal:</strong> O modelo aprendeu os padrões gerais de Phishing sem apenas memorizar palavras soltas. Ele consegue generalizar bem para novos e-mails que nunca viu antes!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-4">
+                    <button id="btn-next-m1" onclick="completeModule1()" disabled class="opacity-50 cursor-not-allowed py-3 px-6 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold rounded-xl transition-all shadow-lg">
+                        Avançar para Módulo 2 →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 2: ETHICS & ALGORITHMIC BIAS -->
+        <section id="screen-mod2" class="hidden space-y-6">
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-6 backdrop-blur-md">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-slate-800 pb-3">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-purple-400 tracking-wider">Módulo 02</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Ética e Vieses em IA: IA Recrutadora de Bolsas</h2>
+                    </div>
+                    <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs">
+                        Fairness Score: <span id="fairness-score" class="font-bold text-rose-400">35% (Injusto)</span>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 text-sm mb-6">
+                    Se os dados de treinamento históricos forem desbalanceados, a IA aprende e amplifica os preconceitos humanos (Vício Algorítmico / <strong class="text-purple-400">Bias</strong>). Sua missão é balancear o banco de dados de alunos candidatos para que a IA selecione com <strong class="text-emerald-400">Equidade e Justiça</strong> sem perder a acurácia.
+                </p>
+
+                <!-- Bias Simulator Control Panel -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Dataset Controls -->
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                        <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800 pb-2">Composição do Dataset de Treino</h3>
+                        
+                        <!-- Group A Slider -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-cyan-400 font-semibold">Estudantes de Escolas Públicas:</span>
+                                <span id="val-group-a" class="font-bold text-slate-200">20%</span>
+                            </div>
+                            <input type="range" id="slider-group-a" min="10" max="80" value="20" oninput="updateEthicsSimulation()" class="w-full accent-cyan-400">
+                        </div>
+
+                        <!-- Group B Slider -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-purple-400 font-semibold">Estudantes de Escolas Particulares:</span>
+                                <span id="val-group-b" class="font-bold text-slate-200">80%</span>
+                            </div>
+                            <input type="range" id="slider-group-b" min="10" max="80" value="80" oninput="updateEthicsSimulation()" class="w-full accent-purple-400">
+                        </div>
+
+                        <!-- Gender/Diversity Balance -->
+                        <div class="space-y-1 pt-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-emerald-400 font-semibold">Representatividade Regional / Gênero:</span>
+                                <span id="val-diversity" class="font-bold text-slate-200">Baixa (30%)</span>
+                            </div>
+                            <input type="range" id="slider-diversity" min="10" max="100" value="30" oninput="updateEthicsSimulation()" class="w-full accent-emerald-400">
+                        </div>
+
+                        <button onclick="testEthicsModel()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-all text-sm shadow-md">
+                            ⚡ Treinar e Testar Modelo de IA
+                        </button>
+                    </div>
+
+                    <!-- Visual Results & Impact -->
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800 pb-2 mb-3">Resultado do Teste de Concessão de Bolsas</h3>
+                            
+                            <!-- Simulation Meters -->
+                            <div class="space-y-3 text-xs">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-slate-400">Taxa de Aprovação - Grupo A (Pública):</span>
+                                        <span id="rate-a" class="font-bold text-rose-400">12%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                        <div id="bar-a" class="bg-rose-500 h-full w-[12%] transition-all duration-500"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-slate-400">Taxa de Aprovação - Grupo B (Particular):</span>
+                                        <span id="rate-b" class="font-bold text-cyan-400">88%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                        <div id="bar-b" class="bg-cyan-500 h-full w-[88%] transition-all duration-500"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Diagnostic Box -->
+                        <div id="ethics-diagnostic" class="p-3 bg-rose-950/30 border border-rose-500/30 rounded-xl text-xs text-rose-300">
+                            🚨 <strong>Alerta de Vício:</strong> O modelo está favorecendo desproporcionalmente o Grupo B devido à escassez de exemplos do Grupo A no histórico!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center pt-4">
+                    <p class="text-xs text-slate-400">Meta: Alcance um <strong>Fairness Score superior a 85%</strong> balanceando os dados.</p>
+                    <button id="btn-next-m2" onclick="completeModule2()" disabled class="opacity-50 cursor-not-allowed py-3 px-6 bg-gradient-to-r from-purple-500 to-emerald-500 text-white font-bold rounded-xl transition-all shadow-lg">
+                        Avançar para Módulo 3 →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 3: REINFORCEMENT LEARNING -->
+        <section id="screen-mod3" class="hidden space-y-6">
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-6 backdrop-blur-md">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-slate-800 pb-3">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-emerald-400 tracking-wider">Módulo 03</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Aprendizado por Reforço: Robô Autônomo</h2>
+                    </div>
+                    <div class="flex gap-3 text-xs">
+                        <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">Época (Epoch): <span id="rl-epoch" class="font-bold text-emerald-400">0</span></div>
+                        <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">Recompensa Total: <span id="rl-reward" class="font-bold text-cyan-400">0</span></div>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 text-sm mb-4">
+                    No <strong class="text-emerald-400">Aprendizado por Reforço (Reinforcement Learning)</strong>, o Agente aprende por Tentativa e Erro. Ajuste a Política de Recompensas e Punilções e veja o Robô aprender a chegar à Bateria sem cair nos Buracos!
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Policy Controls -->
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-4 text-xs">
+                        <h3 class="font-bold text-slate-200 border-b border-slate-800 pb-2">Política de Recompensas</h3>
+
+                        <div>
+                            <label class="block text-slate-400 mb-1">Chegar à Bateria (Objetivo):</label>
+                            <input type="range" id="rl-goal-reward" min="10" max="100" value="100" class="w-full accent-emerald-400">
+                            <span class="text-emerald-400 font-mono font-bold" id="rl-goal-val">+100 pts</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 mb-1">Cair no Buraco (Punição):</label>
+                            <input type="range" id="rl-trap-penalty" min="10" max="100" value="50" class="w-full accent-rose-400">
+                            <span class="text-rose-400 font-mono font-bold" id="rl-trap-val">-50 pts</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-400 mb-1">Custo por Passo (Penaliza Lentidão):</label>
+                            <input type="range" id="rl-step-cost" min="1" max="10" value="2" class="w-full accent-amber-400">
+                            <span class="text-amber-400 font-mono font-bold" id="rl-step-val">-2 pts</span>
+                        </div>
+
+                        <button onclick="startRLTraining()" id="btn-train-rl" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-md active:scale-95 text-sm">
+                            🤖 Simular Treinamento em Tempo Real
+                        </button>
+                    </div>
+
+                    <!-- RL Grid Simulation Arena -->
+                    <div class="md:col-span-2 bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col items-center justify-center min-h-[300px]">
+                        <div id="rl-grid" class="grid grid-cols-5 gap-2 w-full max-w-[320px] aspect-square">
+                            <!-- Cells generated dynamically -->
+                        </div>
+                        <div id="rl-status" class="mt-4 text-xs text-slate-400 font-medium text-center">
+                            Ajuste as regras e clique em "Simular Treinamento" para ver o robô aprender!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-4">
+                    <button id="btn-next-m3" onclick="completeModule3()" disabled class="opacity-50 cursor-not-allowed py-3 px-6 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold rounded-xl transition-all shadow-lg">
+                        Avançar para Módulo 4 →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 4: GENERATIVE AI & NLP QUIZ SHOW -->
+        <section id="screen-mod4" class="hidden space-y-6">
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-6 backdrop-blur-md">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-amber-400 tracking-wider">Módulo 04</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Quiz Show: IA Generativa & Impacto Social</h2>
+                    </div>
+                    <div class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+                        Pergunta <span id="quiz-current-num" class="text-amber-400 font-bold">1</span>/4
+                    </div>
+                </div>
+
+                <!-- Quiz Card -->
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-6 max-w-2xl mx-auto shadow-xl">
+                    <h3 id="quiz-question" class="text-lg font-bold text-slate-100 leading-snug">
+                        Carregando pergunta...
+                    </h3>
+
+                    <!-- Options Grid -->
+                    <div id="quiz-options" class="space-y-3">
+                        <!-- Dynamic Options -->
+                    </div>
+
+                    <!-- Explanation Box -->
+                    <div id="quiz-explanation" class="hidden p-4 rounded-xl text-xs space-y-2 border">
+                        <!-- Dynamic Explanation -->
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-4">
+                    <button id="btn-next-quiz" onclick="nextQuizQuestion()" disabled class="opacity-50 cursor-not-allowed py-3 px-6 bg-gradient-to-r from-amber-500 to-cyan-500 text-white font-bold rounded-xl transition-all shadow-lg">
+                        Próxima Pergunta →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 5: FINAL SCORE & CERTIFICATE -->
+        <section id="screen-final" class="hidden space-y-8">
+            <div class="text-center space-y-3">
+                <div class="inline-block p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-4xl animate-bounce">
+                    🏆
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black text-white">Parabéns, <span id="cert-student-name" class="text-cyan-400">Cientista</span>!</h2>
+                <p class="text-slate-300 text-sm max-w-lg mx-auto">
+                    Você concluiu todos os módulos do laboratório e provou domínio prático e ético em Inteligência Artificial!
+                </p>
+            </div>
+
+            <!-- Badges & Medals Earned -->
+            <div class="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="bg-slate-900/80 border border-cyan-500/30 p-4 rounded-2xl text-center space-y-1 backdrop-blur-md">
+                    <div class="text-3xl">🏷️</div>
+                    <div class="text-xs font-bold text-cyan-400">Mestre da Classificação</div>
+                    <div class="text-[10px] text-slate-400">Supervisionado</div>
+                </div>
+                <div class="bg-slate-900/80 border border-purple-500/30 p-4 rounded-2xl text-center space-y-1 backdrop-blur-md">
+                    <div class="text-3xl">⚖️</div>
+                    <div class="text-xs font-bold text-purple-400">Guardião da Ética</div>
+                    <div class="text-[10px] text-slate-400">Vieses Mitigados</div>
+                </div>
+                <div class="bg-slate-900/80 border border-emerald-500/30 p-4 rounded-2xl text-center space-y-1 backdrop-blur-md">
+                    <div class="text-3xl">🤖</div>
+                    <div class="text-xs font-bold text-emerald-400">Arquiteto de RL</div>
+                    <div class="text-[10px] text-slate-400">Reforço Autônomo</div>
+                </div>
+                <div class="bg-slate-900/80 border border-amber-500/30 p-4 rounded-2xl text-center space-y-1 backdrop-blur-md">
+                    <div class="text-3xl">🧠</div>
+                    <div class="text-xs font-bold text-amber-400">Sábio da Generativa</div>
+                    <div class="text-[10px] text-slate-400">LLM & Sociedade</div>
+                </div>
+            </div>
+
+            <!-- Certificate Printable Card -->
+            <div id="certificate-print-area" class="max-w-3xl mx-auto bg-slate-950 border-4 border-cyan-500/50 rounded-3xl p-8 text-center relative overflow-hidden shadow-2xl space-y-6">
+                <!-- Background Seal Watermark -->
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-[180px] pointer-events-none">
+                    🤖
+                </div>
+
+                <div class="space-y-2">
+                    <div class="text-xs uppercase font-extrabold text-cyan-400 tracking-widest">Certificado Oficial de Conclusão</div>
+                    <h3 class="text-2xl sm:text-3xl font-black text-white">IA & ML LAB: A Jornada da IA</h3>
+                </div>
+
+                <div class="py-4 border-y border-slate-800 my-4 space-y-2">
+                    <p class="text-xs text-slate-400 uppercase">Certificamos que</p>
+                    <div id="cert-full-name" class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400">
+                        NOME DO ESTUDANTE
+                    </div>
+                    <p class="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
+                        Concluiu com êxito os desafios práticos de Classificação Supervisionada, Mitigação de Vieses Algorítmicos, Aprendizado por Reforço e Fundamentos de IA Generativa.
+                    </p>
+                </div>
+
+                <div class="flex justify-between items-center text-xs text-slate-400 pt-2 px-4">
+                    <div>
+                        <span class="block text-slate-500">Pontuação Total</span>
+                        <strong id="cert-final-score" class="text-cyan-400 font-mono text-base">0 XP</strong>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-slate-900 border-2 border-cyan-400 flex items-center justify-center text-2xl shadow-lg">
+                        🎖️
+                    </div>
+                    <div>
+                        <span class="block text-slate-500">Nível Concedido</span>
+                        <strong class="text-emerald-400 font-bold">Cientista Jovem de IA</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="max-w-xs mx-auto flex flex-col sm:flex-row gap-3 no-print">
+                <button onclick="window.print()" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2">
+                    <span>🖨️ Imprimir / Salvar PDF</span>
+                </button>
+                <button onclick="location.reload()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl border border-slate-700 transition-all text-center">
+                    🔄 Reiniciar
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-slate-800 py-4 text-center text-xs text-slate-500 no-print">
+        Laboratório Educacional de IA e ML para o Ensino Médio &copy; 2026. Desenvolvido para aprendizagem prática e ética.
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           1. WEB AUDIO API SOUND ENGINE (NO EXTERNAL AUDIO DEPENDENCIES)
+           ========================================================================== */
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sound-icon').innerText = soundEnabled ? '🔊' : '🔇';
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.1) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        function playSuccessSound() {
+            playTone(523.25, 'triangle', 0.1, 0.15); // C5
+            setTimeout(() => playTone(659.25, 'triangle', 0.1, 0.15), 80); // E5
+            setTimeout(() => playTone(783.99, 'triangle', 0.2, 0.15), 160); // G5
+        }
+
+        function playErrorSound() {
+            playTone(200, 'sawtooth', 0.15, 0.15);
+            setTimeout(() => playTone(150, 'sawtooth', 0.2, 0.15), 100);
+        }
+
+        function playClickSound() {
+            playTone(800, 'sine', 0.04, 0.05);
+        }
+
+        /* ==========================================================================
+           2. GLOBAL GAME STATE & NAVIGATION
+           ========================================================================== */
+        const gameState = {
+            studentName: 'Cientista',
+            avatar: '🔬',
+            score: 0,
+            currentModule: 0,
+            m1: { currentCard: 0, correct: 0, loss: 1.0, completed: false },
+            m2: { fairness: 35, completed: false },
+            m3: { completed: false },
+            m4: { currentQ: 0, score: 0, completed: false }
+        };
+
+        function addScore(pts) {
+            gameState.score += pts;
+            document.getElementById('score-display').innerText = gameState.score;
+            playTone(900, 'sine', 0.08, 0.1);
+        }
+
+        function updateProgressBar(percentage) {
+            document.getElementById('progress-bar').style.width = percentage + '%';
+        }
+
+        function selectAvatar(emoji, btnEl) {
+            playClickSound();
+            gameState.avatar = emoji;
+            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('border-cyan-400'));
+            document.querySelectorAll('.avatar-option').forEach(el => el.classList.add('border-transparent'));
+            btnEl.classList.remove('border-transparent');
+            btnEl.classList.add('border-cyan-400');
+        }
+
+        function startJourney() {
+            const inputName = document.getElementById('student-name').value.trim();
+            if (inputName) {
+                gameState.studentName = inputName;
+            }
+            playSuccessSound();
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-mod1').classList.remove('hidden');
+            updateProgressBar(25);
+            loadM1Card();
+        }
+
+        /* ==========================================================================
+           3. MODULE 1: SUPERVISED LEARNING (SPAM / PHISHING CLASSIFICATION)
+           ========================================================================== */
+        const m1Cards = [
+            { sender: "banco-seguro@alerta-urgente.net", text: "Atenção: Sua conta foi bloqueada! Clique aqui imediatamente para atualizar sua senha.", isSpam: true },
+            { sender: "professora.marina@escola.edu.br", text: "Olá turma, os slides da aula de Química já estão disponíveis no portal do aluno.", isSpam: false },
+            { sender: "premio-facil@sorteio-pix.xyz", text: "VOCÊ GANHOU! Resgate R$ 5.000,00 enviando apenas seu CPF e senha do banco por este link.", isSpam: true },
+            { sender: "biblioteca@escola.edu.br", text: "Lembrete: A devolução do livro de História vence nesta sexta-feira.", isSpam: false },
+            { sender: "suporte@sua-rede-social.com", text: "Solicitação de redefinição de senha recebida. Se não foi você, clique aqui para cancelar.", isSpam: false },
+            { sender: "promocao@loja-desconhecida-barato.tk", text: "iPhone 15 por apenas R$ 100,00! Últimas unidades no estoque secreto!", isSpam: true }
+        ];
+
+        let mcTP = 0, mcTN = 0, mcFP = 0, mcFN = 0;
+
+        function loadM1Card() {
+            const index = gameState.m1.currentCard;
+            if (index >= m1Cards.length) {
+                document.getElementById('m1-feedback').innerHTML = `<span class="text-emerald-400">Classificação concluída! Explore o teste de Overfitting abaixo.</span>`;
+                document.getElementById('btn-next-m1').disabled = false;
+                document.getElementById('btn-next-m1').classList.remove('opacity-50', 'cursor-not-allowed');
+                return;
+            }
+
+            const card = m1Cards[index];
+            document.getElementById('m1-card-index').innerText = index + 1;
+            document.getElementById('m1-card-sender').innerText = card.sender;
+            document.getElementById('m1-card-content').innerText = `"${card.text}"`;
+        }
+
+        function classifyCard(userChoice) {
+            playClickSound();
+            const index = gameState.m1.currentCard;
+            if (index >= m1Cards.length) return;
+
+            const card = m1Cards[index];
+            const isSpamChoice = (userChoice === 'spam');
+            const isCorrect = (isSpamChoice === card.isSpam);
+
+            if (isCorrect) {
+                gameState.m1.correct++;
+                addScore(50);
+                playSuccessSound();
+                document.getElementById('m1-feedback').innerHTML = `<span class="text-emerald-400">✓ Correto! A IA aprendeu com seu rótulo.</span>`;
+                if (card.isSpam) mcTN++; else mcTP++;
+            } else {
+                playErrorSound();
+                document.getElementById('m1-feedback').innerHTML = `<span class="text-rose-400">✗ Incorreto! Rotulagem errada gera erro no modelo.</span>`;
+                if (isSpamChoice && !card.isSpam) mcFP++; else mcFN++;
+            }
+
+            // Update confusion matrix UI
+            document.getElementById('mc-tp').innerText = mcTP;
+            document.getElementById('mc-tn').innerText = mcTN;
+            document.getElementById('mc-fp').innerText = mcFP;
+            document.getElementById('mc-fn').innerText = mcFN;
+
+            // Metrics Update
+            gameState.m1.currentCard++;
+            const accuracy = Math.round((gameState.m1.correct / gameState.m1.currentCard) * 100);
+            const loss = (1 - (gameState.m1.correct / gameState.m1.currentCard)).toFixed(2);
+
+            document.getElementById('m1-accuracy').innerText = accuracy + '%';
+            document.getElementById('m1-loss').innerText = loss;
+
+            setTimeout(loadM1Card, 600);
+        }
+
+        function updateFitConcept(val) {
+            playClickSound();
+            const expEl = document.getElementById('fit-explanation');
+            if (val == 1) {
+                expEl.innerHTML = `<strong class="text-amber-400">Underfitting (Subajuste):</strong> O algoritmo é simples demais. Ele erra tanto nos e-mails de treino quanto nos e-mails novos porque não conseguiu capturar as regras básicas.`;
+            } else if (val == 2) {
+                expEl.innerHTML = `<strong class="text-emerald-400">Modelo Ideal (Boa Generalização):</strong> O modelo aprende os padrões reais (ex: urgência falsa, links suspeitos) e consegue acertar e-mails inéditos com facilidade!`;
+            } else {
+                expEl.innerHTML = `<strong class="text-rose-400">Overfitting (Superajuste):</strong> O modelo decorou até detalhes irrelevantes dos e-mails de treino (como o ponto final ou letras maiúsculas). Quando chega um e-mail novo, ele falha feio!`;
+            }
+        }
+
+        function completeModule1() {
+            playSuccessSound();
+            document.getElementById('screen-mod1').classList.add('hidden');
+            document.getElementById('screen-mod2').classList.remove('hidden');
+            updateProgressBar(50);
+        }
+
+        /* ==========================================================================
+           4. MODULE 2: ETHICS & ALGORITHMIC BIAS
+           ========================================================================== */
+        function updateEthicsSimulation() {
+            const groupA = parseInt(document.getElementById('slider-group-a').value);
+            const groupB = parseInt(document.getElementById('slider-group-b').value);
+            const diversity = parseInt(document.getElementById('slider-diversity').value);
+
+            document.getElementById('val-group-a').innerText = groupA + '%';
+            document.getElementById('val-group-b').innerText = groupB + '%';
+            
+            let divLabel = "Baixa (" + diversity + "%)";
+            if (diversity > 70) divLabel = "Excelente (" + diversity + "%)";
+            else if (diversity > 40) divLabel = "Média (" + diversity + "%)";
+            document.getElementById('val-diversity').innerText = divLabel;
+        }
+
+        function testEthicsModel() {
+            playClickSound();
+            const groupA = parseInt(document.getElementById('slider-group-a').value);
+            const groupB = parseInt(document.getElementById('slider-group-b').value);
+            const diversity = parseInt(document.getElementById('slider-diversity').value);
+
+            // Calculate simulated approval rates based on dataset proportion
+            const total = groupA + groupB;
+            const rateA = Math.round((groupA / total) * (diversity / 100) * 100);
+            const rateB = Math.round((groupB / total) * 100);
+
+            document.getElementById('rate-a').innerText = rateA + '%';
+            document.getElementById('bar-a').style.width = rateA + '%';
+            document.getElementById('rate-b').innerText = rateB + '%';
+            document.getElementById('bar-b').style.width = rateB + '%';
+
+            // Calculate Fairness Score (smaller gap = higher fairness)
+            const gap = Math.abs(rateA - rateB);
+            const fairness = Math.max(10, 100 - gap);
+            gameState.m2.fairness = fairness;
+
+            const scoreEl = document.getElementById('fairness-score');
+            const diagEl = document.getElementById('ethics-diagnostic');
+
+            if (fairness >= 85) {
+                playSuccessSound();
+                addScore(150);
+                scoreEl.innerText = fairness + '% (Justo & Ético)';
+                scoreEl.className = 'font-bold text-emerald-400';
+                diagEl.className = 'p-3 bg-emerald-950/30 border border-emerald-500/30 rounded-xl text-xs text-emerald-300';
+                diagEl.innerHTML = `🎉 <strong>Excelente!</strong> Seu dataset é equilibrado e representativo. A IA agora toma decisões justas sem discriminar candidatos!`;
+                
+                document.getElementById('btn-next-m2').disabled = false;
+                document.getElementById('btn-next-m2').classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                playErrorSound();
+                scoreEl.innerText = fairness + '% (Injusto)';
+                scoreEl.className = 'font-bold text-rose-400';
+                diagEl.className = 'p-3 bg-rose-950/30 border border-rose-500/30 rounded-xl text-xs text-rose-300';
+                diagEl.innerHTML = `🚨 <strong>Vício Algorítmico Detectado:</strong> A grande diferença entre as taxas de aprovação indica discriminação gerada por dados desbalanceados. Equilibre mais os grupos!`;
+            }
+        }
+
+        function completeModule2() {
+            playSuccessSound();
+            document.getElementById('screen-mod2').classList.add('hidden');
+            document.getElementById('screen-mod3').classList.remove('hidden');
+            updateProgressBar(75);
+            initRLGridUI();
+        }
+
+        /* ==========================================================================
+           5. MODULE 3: REINFORCEMENT LEARNING (SIMULATOR)
+           ========================================================================== */
+        // Grid setup: 0 = Empty, 1 = Robot Start (0,0), 2 = Goal (4,4), 3 = Trap
+        const gridLayout = [
+            [1, 0, 0, 0, 0],
+            [0, 3, 0, 3, 0],
+            [0, 0, 0, 0, 0],
+            [0, 3, 0, 3, 0],
+            [0, 0, 0, 0, 2]
+        ];
+
+        let robotPos = { r: 0, c: 0 };
+
+        function initRLGridUI() {
+            const container = document.getElementById('rl-grid');
+            container.innerHTML = '';
+            for (let r = 0; r < 5; r++) {
+                for (let c = 0; c < 5; c++) {
+                    const cell = document.createElement('div');
+                    cell.id = `cell-${r}-${c}`;
+                    cell.className = 'bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-xl transition-all duration-300';
+                    
+                    if (r === 0 && c === 0) cell.innerText = '🤖';
+                    else if (r === 4 && c === 4) cell.innerText = '🔋';
+                    else if ((r === 1 && c === 1) || (r === 1 && c === 3) || (r === 3 && c === 1) || (r === 3 && c === 3)) {
+                        cell.innerText = '🕳️';
+                        cell.classList.add('bg-rose-950/20');
+                    }
+                    container.appendChild(cell);
+                }
+            }
+
+            // Slider Listeners
+            document.getElementById('rl-goal-reward').oninput = (e) => {
+                document.getElementById('rl-goal-val').innerText = '+' + e.target.value + ' pts';
+            };
+            document.getElementById('rl-trap-penalty').oninput = (e) => {
+                document.getElementById('rl-trap-val').innerText = '-' + e.target.value + ' pts';
+            };
+            document.getElementById('rl-step-cost').oninput = (e) => {
+                document.getElementById('rl-step-val').innerText = '-' + e.target.value + ' pts';
+            };
+        }
+
+        function startRLTraining() {
+            playClickSound();
+            const btn = document.getElementById('btn-train-rl');
+            btn.disabled = true;
+            btn.innerText = '⏳ Aprendendo em tempo real...';
+
+            let epoch = 0;
+            const maxEpochs = 8;
+            let currentReward = 0;
+
+            const path = [
+                {r:0, c:0}, {r:0, c:1}, {r:0, c:2}, {r:0, c:3}, {r:0, c:4},
+                {r:1, c:4}, {r:2, c:4}, {r:3, c:4}, {r:4, c:4}
+            ];
+
+            let pathStep = 0;
+
+            const interval = setInterval(() => {
+                // Clear previous robot
+                document.getElementById(`cell-${robotPos.r}-${robotPos.c}`).innerText = '';
+                if (robotPos.r === 4 && robotPos.c === 4) document.getElementById(`cell-4-4`).innerText = '🔋';
+                if ((robotPos.r === 1 && robotPos.c === 1) || (robotPos.r === 1 && robotPos.c === 3) || 
+                    (robotPos.r === 3 && robotPos.c === 1) || (robotPos.r === 3 && robotPos.c === 3)) {
+                    document.getElementById(`cell-${robotPos.r}-${robotPos.c}`).innerText = '🕳️';
+                }
+
+                pathStep++;
+                if (pathStep >= path.length) {
+                    epoch++;
+                    pathStep = 0;
+                    currentReward += parseInt(document.getElementById('rl-goal-reward').value);
+                    document.getElementById('rl-epoch').innerText = epoch;
+                    document.getElementById('rl-reward').innerText = currentReward;
+                    playTone(600, 'sine', 0.05);
+
+                    if (epoch >= maxEpochs) {
+                        clearInterval(interval);
+                        playSuccessSound();
+                        addScore(200);
+                        document.getElementById('rl-status').innerHTML = `<span class="text-emerald-400 font-bold">🎉 Treinamento Concluído! O robô descobriu a rota perfeita otimizando a política de recompensas!</span>`;
+                        btn.innerText = '✅ Treinamento Concluído';
+                        
+                        document.getElementById('btn-next-m3').disabled = false;
+                        document.getElementById('btn-next-m3').classList.remove('opacity-50', 'cursor-not-allowed');
+                        return;
+                    }
+                }
+
+                robotPos = path[pathStep];
+                const newCell = document.getElementById(`cell-${robotPos.r}-${robotPos.c}`);
+                newCell.innerText = '🤖';
+
+            }, 250);
+        }
+
+        function completeModule3() {
+            playSuccessSound();
+            document.getElementById('screen-mod3').classList.add('hidden');
+            document.getElementById('screen-mod4').classList.remove('hidden');
+            updateProgressBar(90);
+            loadQuizQuestion();
+        }
+
+        /* ==========================================================================
+           6. MODULE 4: GENERATIVE AI & NLP QUIZ SHOW
+           ========================================================================== */
+        const quizData = [
+            {
+                q: "O que é um LLM (Large Language Model) como o ChatGPT ou Gemini?",
+                options: [
+                    "Um programa que pensa como um humano e possui consciência própria.",
+                    "Um modelo estatístico treinado com bilhões de textos para prever a próxima palavra mais provável.",
+                    "Uma calculadora avançada que só funciona para contas matemáticas.",
+                    "Um robô físico que lê livros em bibliotecas."
+                ],
+                answer: 1,
+                explanation: "Exato! LLMs são redes neurais estatísticas treinadas para prever a próxima palavra com base em padrões aprendidos em volumes massivos de texto."
+            },
+            {
+                q: "O que significa o termo 'Alucinação' em IA Generativa?",
+                options: [
+                    "Quando o computador esquenta muito durante o processamento.",
+                    "Quando a IA gera respostas com fatos falsos ou inventados como se fossem verdadeiros.",
+                    "Quando o usuário esquece a senha de acesso.",
+                    "Quando a IA cria imagens tridimensionais."
+                ],
+                answer: 1,
+                explanation: "Correto! Alucinação ocorre quando o modelo gera informações incorretas com alta confiança, pois ele prioriza a fluência da linguagem sobre a veracidade dos fatos."
+            },
+            {
+                q: "Qual a melhor postura ética ao usar ferramentas de IA nos trabalhos escolares?",
+                options: [
+                    "Copiar e colar tudo diretamente sem ler ou citar a fonte.",
+                    "Usar a IA como tutora para explicar conceitos, revisar textos e citar seu uso de forma transparente.",
+                    "Pedir para a IA fazer a prova inteira por você em segredo.",
+                    "Proibir totalmente qualquer uso de computador na escola."
+                ],
+                answer: 1,
+                explanation: "Perfeito! A IA é uma poderosa ferramenta de apoio ao aprendizado, mas o pensamento crítico, a autoria e a transparência continuam sendo seus!"
+            },
+            {
+                q: "O que é 'Visão Computacional'?",
+                options: [
+                    "A capacidade de um computador enxergar no escuro.",
+                    "O campo da IA que ensina máquinas a identificar e processar imagens e vídeos como os humanos.",
+                    "Óculos digitais usados por programadores.",
+                    "Uma tela com resolução de alta definição."
+                ],
+                answer: 1,
+                explanation: "Excelente! A Visão Computacional permite que IAs reconheçam rostos, leiam placas de trânsito e detectem doenças em exames médicos!"
+            }
+        ];
+
+        function loadQuizQuestion() {
+            const qObj = quizData[gameState.m4.currentQ];
+            document.getElementById('quiz-current-num').innerText = gameState.m4.currentQ + 1;
+            document.getElementById('quiz-question').innerText = qObj.q;
+
+            const optContainer = document.getElementById('quiz-options');
+            optContainer.innerHTML = '';
+            document.getElementById('quiz-explanation').classList.add('hidden');
+            document.getElementById('btn-next-quiz').disabled = true;
+            document.getElementById('btn-next-quiz').classList.add('opacity-50', 'cursor-not-allowed');
+
+            qObj.options.forEach((optText, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl text-xs sm:text-sm text-slate-200 transition-all font-medium flex items-center justify-between';
+                btn.innerHTML = `<span>${optText}</span> <span class="opt-badge text-slate-500 font-mono text-xs">#${i+1}</span>`;
+                btn.onclick = () => answerQuiz(i, btn);
+                optContainer.appendChild(btn);
+            });
+        }
+
+        function answerQuiz(selectedIndex, btnEl) {
+            playClickSound();
+            const qObj = quizData[gameState.m4.currentQ];
+            const allBtns = document.getElementById('quiz-options').children;
+
+            // Disable all option buttons
+            for (let b of allBtns) b.disabled = true;
+
+            const expEl = document.getElementById('quiz-explanation');
+            expEl.classList.remove('hidden');
+
+            if (selectedIndex === qObj.answer) {
+                playSuccessSound();
+                addScore(100);
+                btnEl.classList.add('bg-emerald-950/60', 'border-emerald-500', 'text-emerald-300');
+                expEl.className = 'p-4 rounded-xl text-xs space-y-2 border bg-emerald-950/30 border-emerald-500/40 text-emerald-300';
+                expEl.innerHTML = `<strong>Resposta Correta! 🎉</strong><br>${qObj.explanation}`;
+            } else {
+                playErrorSound();
+                btnEl.classList.add('bg-rose-950/60', 'border-rose-500', 'text-rose-300');
+                allBtns[qObj.answer].classList.add('bg-emerald-950/40', 'border-emerald-500/50', 'text-emerald-300');
+                expEl.className = 'p-4 rounded-xl text-xs space-y-2 border bg-rose-950/30 border-rose-500/40 text-rose-300';
+                expEl.innerHTML = `<strong>Atenção:</strong><br>${qObj.explanation}`;
+            }
+
+            document.getElementById('btn-next-quiz').disabled = false;
+            document.getElementById('btn-next-quiz').classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        function nextQuizQuestion() {
+            gameState.m4.currentQ++;
+            if (gameState.m4.currentQ < quizData.length) {
+                loadQuizQuestion();
+            } else {
+                showFinalScreen();
+            }
+        }
+
+        /* ==========================================================================
+           7. SCREEN 5: FINAL CERTIFICATE & CONFETTI PARTICLES
+           ========================================================================== */
+        function showFinalScreen() {
+            playSuccessSound();
+            updateProgressBar(100);
+            document.getElementById('screen-mod4').classList.add('hidden');
+            document.getElementById('screen-final').classList.remove('hidden');
+
+            document.getElementById('cert-student-name').innerText = gameState.studentName;
+            document.getElementById('cert-full-name').innerText = gameState.avatar + ' ' + gameState.studentName;
+            document.getElementById('cert-final-score').innerText = gameState.score + ' XP';
+
+            startConfetti();
+        }
+
+        // Lightweight Confetti Particles
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#00f0ff', '#a855f7', '#10b981', '#fbbf24', '#f43f5e'];
+
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedY: Math.random() * 3 + 2,
+                    speedX: Math.random() * 2 - 1
+                });
+            }
+
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p) => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    if (p.y > canvas.height) p.y = -10;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                });
+                requestAnimationFrame(animateConfetti);
+            }
+            animateConfetti();
+        }
+
+        // Window resize handler for canvas
+        window.onresize = () => {
+            const canvas = document.getElementById('confetti-canvas');
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        };
+    </script>
+</body>
+</html>
