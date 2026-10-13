@@ -533,11 +533,13 @@
         /* ==========================================================================
            INTEGRAÇÃO COM GOOGLE SHEETS
            ========================================================================== */
-        function registrarAtividade(evento, pontuacao = 0) {
-            const URL_WEB_APP = 'SUA_URL_DO_GOOGLE_SCRIPT'; // <--- COLE SUA URL COPIADA DO GOOGLE APPS SCRIPT AQUI
+       /* ==========================================================================
+   INTEGRAÇÃO COM GOOGLE SHEETS
+   ========================================================================== */
+function registrarAtividade(evento, pontuacao = 0) {
+    const URL_WEB_APP = 'https://script.google.com/macros/s/AKfycbz_3MgDfo41Ag2GHHh2rsRWyNyQhCvc.../exec'; // URL real do seu Web App
 
-            if (!URL_WEB_APP || URL_WEB_APP === 'SUA_URL_DO_GOOGLE_SCRIPT') return;
-
+    if (!URL_WEB_APP || URL_WEB_APP === 'SUA_URL_DO_GOOGLE_SCRIPT') return;
             fetch(URL_WEB_APP, {
                 method: 'POST',
                 mode: 'no-cors',
